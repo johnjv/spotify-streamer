@@ -20,5 +20,6 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Artist"
-        android:id="@+id/list_item_artist_text" />
+        android:id="@+id/list_item_artist_text"
+        android:layout_weight="1" />
 </LinearLayout>
