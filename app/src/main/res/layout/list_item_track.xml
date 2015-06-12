@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Artist"
+            android:text="Track"
             android:id="@+id/list_item_track_album_text" />
 
     </LinearLayout>
