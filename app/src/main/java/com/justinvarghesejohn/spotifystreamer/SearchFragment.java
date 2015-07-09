@@ -1,15 +1,23 @@
 package com.justinvarghesejohn.spotifystreamer;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
@@ -26,12 +34,10 @@ import retrofit.RetrofitError;
 public class SearchFragment extends Fragment {
 
     private SearchAdapter searchAdapter;
-    private List<Artist> searchResults;
-    private View view;
+    private List<Artist> searchResults = new ArrayList<Artist>();
     private ListView artistsListView;
     private EditText searchBar;
     private String artistName;
-    private SpotifySearchTask spotifySearch;
 
     public SearchFragment() {
     }
@@ -43,11 +49,37 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_search, container, false);
 
-        searchAdapter = new SearchAdapter(getActivity(), searchResults);
+        searchBar = (EditText) rootView.findViewById(R.id.search_bar);
+        searchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    artistsListView.setVisibility(View.GONE);
 
-        // Get a reference to the ListView, and attach this adapter to it.
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_search);
-        listView.setAdapter(searchAdapter);
+                    artistName = searchBar.getText().toString();
+                    searchArtists(artistName);
+
+                    // dismiss keyboard
+                    InputMethodManager imm = (InputMethodManager) getActivity().getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(searchBar.getWindowToken(), 0);
+                    searchBar.setText("");
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        artistsListView = (ListView) rootView.findViewById(R.id.listview_search);
+        artistsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Artist currentArtist = searchResults.get(position);
+                String[] spotifyData = { currentArtist.name, currentArtist.id };
+                Intent tracksIntent = new Intent(getActivity(), TracksActivity.class);
+                tracksIntent.putExtra(Intent.EXTRA_TEXT, spotifyData);
+                startActivity(tracksIntent);
+            }
+        });
 
         return rootView;
     }
@@ -87,11 +119,16 @@ public class SearchFragment extends Fragment {
                     Artist artist = results.get(i);
                     Log.i(LOG_TAG, i + " " + artist.name);
                 }
-            }
-            else {
+                artistsListView.setVisibility(View.VISIBLE);
+
+                searchResults = results;
+                searchAdapter = new SearchAdapter(getActivity(), results);
+                artistsListView.setAdapter(searchAdapter);
 
             }
         }
     }
+
+
 
 }

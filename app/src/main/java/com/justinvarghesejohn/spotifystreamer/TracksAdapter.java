@@ -12,11 +12,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import kaaes.spotify.webapi.android.models.Artist;
+import kaaes.spotify.webapi.android.models.Track;
 
-public class SearchAdapter extends ArrayAdapter<Artist> {
+public class TracksAdapter extends ArrayAdapter<Track> {
 
-    private static final String LOG_TAG = SearchAdapter.class.getSimpleName();
+    private static final String LOG_TAG = TracksAdapter.class.getSimpleName();
 
     /**
      * This is a custom constructor (it doesn't mirror a superclass constructor).
@@ -26,7 +26,7 @@ public class SearchAdapter extends ArrayAdapter<Artist> {
      * @param context        The current context. Used to inflate the layout file.
      * @param searchResults A List of Spotify Artist objects to display in a list
      */
-    public SearchAdapter(Context context, List<Artist> searchResults) {
+    public TracksAdapter(Context context, List<Track> searchResults) {
         super(context, 0, searchResults);
     }
 
@@ -40,28 +40,32 @@ public class SearchAdapter extends ArrayAdapter<Artist> {
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // gets the Artist Object from ArrayAdapter at correct position
-        Artist result = getItem(position);
-        String artistName = result.name;
+        // gets the Track Object from ArrayAdapter at correct position
+        Track result = getItem(position);
+        String trackName = result.name;
+        String trackAlbumName = result.album.name;
         String imageUrl = null;
 
-        // check in case the artist has no images available
-        if (result.images != null && result.images.size() > 0) {
-            imageUrl = result.images.get(0).url;
+        // check in case the album has no images available
+        if (result.album.images != null && result.album.images.size() > 0) {
+            imageUrl = result.album.images.get(0).url;
         }
 
         // If this is a new View object we're getting, then inflate the layout.
         // If not, this view already has the layout inflated from a previous call to getView,
         // and we modify the View widgets as usual.
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_artist, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_track, parent, false);
         }
 
-        ImageView iconView = (ImageView) convertView.findViewById(R.id.list_item_artist_img);
+        ImageView iconView = (ImageView) convertView.findViewById(R.id.list_item_track_album_img);
         Picasso.with(this.getContext()).load(imageUrl).into(iconView);
 
-        TextView versionNameView = (TextView) convertView.findViewById(R.id.list_item_artist_text);
-        versionNameView.setText(artistName);
+        TextView trackNameView = (TextView) convertView.findViewById(R.id.list_item_track_text);
+        trackNameView.setText(trackName);
+
+        TextView albumNameView = (TextView) convertView.findViewById(R.id.list_item_track_album_text);
+        albumNameView.setText(trackAlbumName);
 
         return convertView;
     }
