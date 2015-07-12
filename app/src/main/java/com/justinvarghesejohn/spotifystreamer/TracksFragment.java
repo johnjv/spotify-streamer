@@ -35,17 +35,30 @@ public class TracksFragment extends Fragment {
     private ListView tracksListView;
     private String artistId;
     private TracksAdapter tracksAdapter;
+    private static final String ARTIST_ID = "artistId";
 
     public TracksFragment() {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putString(ARTIST_ID, artistId);
+
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getActivity().getIntent() != null) {
+
+        if (savedInstanceState != null) {
+            // Restore Spotify artist id from saved instance
+            artistId = savedInstanceState.getString(ARTIST_ID);
+            Log.i(LOG_TAG, artistId);
+        }
+        else if (getActivity().getIntent() != null) {
             String[] spotifyId = getActivity().getIntent().getStringArrayExtra(Intent.EXTRA_TEXT);
             artistId = spotifyId[1];
-            Log.i(LOG_TAG, artistId);
         }
     }
 
