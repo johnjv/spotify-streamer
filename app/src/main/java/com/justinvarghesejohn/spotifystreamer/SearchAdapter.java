@@ -40,6 +40,8 @@ public class SearchAdapter extends ArrayAdapter<Artist> {
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        SearchViewHolder viewHolder;
+
         // gets the Artist Object from ArrayAdapter at correct position
         Artist result = getItem(position);
         String artistName = result.name;
@@ -47,7 +49,7 @@ public class SearchAdapter extends ArrayAdapter<Artist> {
 
         // check in case the artist has no images available
         if (result.images != null && result.images.size() > 0) {
-            imageUrl = result.images.get(0).url;
+            imageUrl = result.images.get(result.images.size() - 1).url;
         }
 
         // If this is a new View object we're getting, then inflate the layout.
@@ -55,15 +57,25 @@ public class SearchAdapter extends ArrayAdapter<Artist> {
         // and we modify the View widgets as usual.
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_artist, parent, false);
+            viewHolder = new SearchViewHolder();
+            viewHolder.iconView = (ImageView) convertView.findViewById(R.id.list_item_artist_img);
+            viewHolder.artistNameView = (TextView) convertView.findViewById(R.id.list_item_artist_text);
+            convertView.setTag(viewHolder);
+        }
+        else {
+            viewHolder = (SearchViewHolder) convertView.getTag();
         }
 
-        ImageView iconView = (ImageView) convertView.findViewById(R.id.list_item_artist_img);
-        Picasso.with(this.getContext()).load(imageUrl).into(iconView);
+        Picasso.with(this.getContext()).load(imageUrl).into(viewHolder.iconView);
 
-        TextView versionNameView = (TextView) convertView.findViewById(R.id.list_item_artist_text);
-        versionNameView.setText(artistName);
+        viewHolder.artistNameView.setText(artistName);
 
         return convertView;
+    }
+
+    private static class SearchViewHolder {
+        public ImageView iconView;
+        public TextView artistNameView;
     }
 
 }
