@@ -50,7 +50,7 @@ public class TracksAdapter extends ArrayAdapter<Track> {
 
         // check in case the album has no images available
         if (result.album.images != null && result.album.images.size() > 0) {
-            imageUrl = result.album.images.get(0).url;
+            imageUrl = result.album.images.get(result.album.images.size() - 2).url;
         }
 
         // If this is a new View object we're getting, then inflate the layout.
