@@ -40,6 +40,8 @@ public class TracksAdapter extends ArrayAdapter<Track> {
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        TracksViewHolder viewHolder;
+
         // gets the Track Object from ArrayAdapter at correct position
         Track result = getItem(position);
         String trackName = result.name;
@@ -56,18 +58,29 @@ public class TracksAdapter extends ArrayAdapter<Track> {
         // and we modify the View widgets as usual.
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_track, parent, false);
+            viewHolder = new TracksViewHolder();
+            viewHolder.iconView = (ImageView) convertView.findViewById(R.id.list_item_track_album_img);
+            viewHolder.trackNameView = (TextView) convertView.findViewById(R.id.list_item_track_text);
+            viewHolder.albumNameView = (TextView) convertView.findViewById(R.id.list_item_track_album_text);
+            convertView.setTag(viewHolder);
+        }
+        else {
+            viewHolder = (TracksViewHolder) convertView.getTag();
         }
 
-        ImageView iconView = (ImageView) convertView.findViewById(R.id.list_item_track_album_img);
-        Picasso.with(this.getContext()).load(imageUrl).into(iconView);
+        Picasso.with(this.getContext()).load(imageUrl).into(viewHolder.iconView);
 
-        TextView trackNameView = (TextView) convertView.findViewById(R.id.list_item_track_text);
-        trackNameView.setText(trackName);
+        viewHolder.trackNameView.setText(trackName);
 
-        TextView albumNameView = (TextView) convertView.findViewById(R.id.list_item_track_album_text);
-        albumNameView.setText(trackAlbumName);
+        viewHolder.albumNameView.setText(trackAlbumName);
 
         return convertView;
+    }
+
+    private static class TracksViewHolder {
+        public ImageView iconView;
+        public TextView trackNameView;
+        public TextView albumNameView;
     }
 
 }
