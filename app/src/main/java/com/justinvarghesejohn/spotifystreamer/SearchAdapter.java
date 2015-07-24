@@ -49,7 +49,7 @@ public class SearchAdapter extends ArrayAdapter<Artist> {
 
         // check in case the artist has no images available
         if (result.images != null && result.images.size() > 0) {
-            imageUrl = result.images.get(result.images.size() - 1).url;
+            imageUrl = result.images.get(result.images.size() - 2).url;
         }
 
         // If this is a new View object we're getting, then inflate the layout.
