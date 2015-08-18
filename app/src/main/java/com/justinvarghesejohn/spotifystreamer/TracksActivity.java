@@ -14,7 +14,7 @@ public class TracksActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tracks);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.tracks_container, new TracksFragment())
+                    .add(R.id.tracks_detail_container, new TracksFragment())
                     .commit();
         }
     }
