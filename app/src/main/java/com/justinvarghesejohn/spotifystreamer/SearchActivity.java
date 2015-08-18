@@ -12,11 +12,12 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.search_container, new SearchFragment())
-                    .commit();
-        }
+//        removing because fragment is already created in the layout
+//        if (savedInstanceState == null) {
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.fragment_search, new SearchFragment())
+//                    .commit();
+//        }
     }
 
 
