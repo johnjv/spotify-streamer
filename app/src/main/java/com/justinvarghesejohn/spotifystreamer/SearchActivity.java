@@ -1,12 +1,13 @@
 package com.justinvarghesejohn.spotifystreamer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements SearchFragment.Callback {
 
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
     private boolean mTwoPane;
@@ -27,7 +28,7 @@ public class SearchActivity extends AppCompatActivity {
 
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.tracks_detail_container, new TracksFragment())
+                        .replace(R.id.tracks_detail_container, new TracksFragment(), DETAILFRAGMENT_TAG)
                         .commit();
             }
         } else {
@@ -56,5 +57,29 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemSelected(String[] spotifyData) {
+        if (mTwoPane) {
+            // if in two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            Bundle args = new Bundle();
+            // putting String arry vs Parceable ?still unsure about this
+            args.putStringArray(TracksFragment.DETAIL_DATA, spotifyData);
+
+            TracksFragment fragment = new TracksFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.tracks_detail_container, fragment, DETAILFRAGMENT_TAG)
+                    .commit();
+
+        } else {
+            Intent tracksIntent = new Intent(this, TracksActivity.class);
+            tracksIntent.putExtra(Intent.EXTRA_TEXT, spotifyData);
+            startActivity(tracksIntent);
+        }
     }
 }

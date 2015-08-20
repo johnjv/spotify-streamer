@@ -1,7 +1,6 @@
 package com.justinvarghesejohn.spotifystreamer;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -75,9 +74,14 @@ public class SearchFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Artist currentArtist = searchResults.get(position);
                 String[] spotifyData = { currentArtist.name, currentArtist.id };
-                Intent tracksIntent = new Intent(getActivity(), TracksActivity.class);
-                tracksIntent.putExtra(Intent.EXTRA_TEXT, spotifyData);
-                startActivity(tracksIntent);
+
+
+//                Intent tracksIntent = new Intent(getActivity(), TracksActivity.class);
+//                tracksIntent.putExtra(Intent.EXTRA_TEXT, spotifyData);
+//                startActivity(tracksIntent);
+
+                ((Callback) getActivity())
+                        .onItemSelected(spotifyData);
             }
         });
 
@@ -127,6 +131,18 @@ public class SearchFragment extends Fragment {
 
             }
         }
+    }
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        public void onItemSelected(String[] spotifyData);
     }
 
 

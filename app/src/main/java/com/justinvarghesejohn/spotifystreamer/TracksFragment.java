@@ -1,6 +1,5 @@
 package com.justinvarghesejohn.spotifystreamer;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -36,6 +35,9 @@ public class TracksFragment extends Fragment {
     private String artistId;
     private TracksAdapter tracksAdapter;
     private static final String ARTIST_ID = "artistId";
+    static final String DETAIL_DATA = "DF_DATA";
+    private String[] spotifyData;
+
 
     public TracksFragment() {
     }
@@ -49,6 +51,13 @@ public class TracksFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            String[] spotifyId = arguments.getStringArray(DETAIL_DATA);
+            artistId = spotifyId[1];
+        }
+
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
@@ -56,10 +65,10 @@ public class TracksFragment extends Fragment {
             artistId = savedInstanceState.getString(ARTIST_ID);
             Log.i(LOG_TAG, artistId);
         }
-        else if (getActivity().getIntent() != null) {
-            String[] spotifyId = getActivity().getIntent().getStringArrayExtra(Intent.EXTRA_TEXT);
-            artistId = spotifyId[1];
-        }
+//        else if (getActivity().getIntent() != null) {
+//            String[] spotifyId = getActivity().getIntent().getStringArrayExtra(Intent.EXTRA_TEXT);
+//            artistId = spotifyId[1];
+//        }
     }
 
     @Override
