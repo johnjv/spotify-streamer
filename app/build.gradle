@@ -6,8 +6,8 @@ android {
 
     defaultConfig {
         applicationId "com.justinvarghesejohn.spotifystreamer"
-        minSdkVersion 'MNC'
-        targetSdkVersion 'MNC'
+        minSdkVersion 16
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
